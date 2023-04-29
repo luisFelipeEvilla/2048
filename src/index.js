@@ -34,20 +34,9 @@ const moveDown = () => {
 
             // move cell down if it is not empty
             if (cell.innerHTML !== '0') {
-                let nextRow = rows[rows.length - 1].children[j];
-                let index = rows.length - 1;
-                let validCell = false;
+                const nextRow = findValidCellVertical(rows, i, j);
 
-                while (!validCell && index > i) {
-                    if (nextRow.innerHTML === '0' || nextRow.innerHTML === cell.innerHTML) {
-                        validCell = true;
-                    } else {
-                        index--;
-                        nextRow = rows[index].children[j];
-                    }
-                }
-
-                if (validCell) {
+                if (nextRow) {
                     if (nextRow.innerHTML === '0') {
                         nextRow.innerHTML = cell.innerHTML;
                         cell.innerHTML = '0';
@@ -60,6 +49,25 @@ const moveDown = () => {
     }
 
     addNewToken();
+}
+
+const findValidCellVertical = (rows, rowIndex, colIndex) => {
+    let nextRow = rows[rows.length - 1].children[colIndex];
+    let index = rows.length - 1;
+    let validCell = false;
+
+    const cell = rows[rowIndex].children[colIndex];
+
+    while (!validCell && index > rowIndex) {
+        if (nextRow.innerHTML === '0' || nextRow.innerHTML === cell.innerHTML) {
+            validCell = true;
+        } else {
+            index--;
+            nextRow = rows[index].children[colIndex];
+        }
+    }
+
+    return validCell ? nextRow : false;
 }
 
 const combineCells = (nextRow, cell) => {
