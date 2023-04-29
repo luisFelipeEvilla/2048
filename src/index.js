@@ -26,13 +26,13 @@ const moveDown = () => {
             const cell = row.children[j];
 
             // move cell down if it is not empty
-            if (cell.innerHTML !== '0') {
+            if (cell.innerHTML !== '') {
                 const nextRow = findValidCellVertical('down', rows, i, j);
 
                 if (nextRow) {
-                    if (nextRow.innerHTML === '0') {
+                    if (nextRow.innerHTML === '') {
                         nextRow.innerHTML = cell.innerHTML;
-                        cell.innerHTML = '0';
+                        cell.innerHTML = '';
                     } else {
                         combineCells(nextRow, cell);
                     }
@@ -56,13 +56,13 @@ const moveUp = () => {
             const cell = row.children[j];
 
             // move cell down if it is not empty
-            if (cell.innerHTML !== '0') {
+            if (cell.innerHTML !== '') {
                 const nextRow = findValidCellVertical('up', rows, i, j);
 
                 if (nextRow) {
-                    if (nextRow.innerHTML === '0') {
+                    if (nextRow.innerHTML === '') {
                         nextRow.innerHTML = cell.innerHTML;
-                        cell.innerHTML = '0';
+                        cell.innerHTML = '';
                     } else {
                         combineCells(nextRow, cell);
                     }
@@ -87,9 +87,9 @@ const moveRight = () => {
             const nextCol = findValidCellHorizontal('right', row, i, j); 
             
             if (nextCol) {
-                if (nextCol.innerHTML === '0') {
+                if (nextCol.innerHTML === '') {
                     nextCol.innerHTML = cell.innerHTML;
-                    cell.innerHTML = '0';
+                    cell.innerHTML = '';
                 } else {
                     combineCells(nextCol, cell);
                 }
@@ -113,9 +113,9 @@ const moveLeft = () => {
             const nextCol = findValidCellHorizontal('left', row, i, j); 
             
             if (nextCol) {
-                if (nextCol.innerHTML === '0') {
+                if (nextCol.innerHTML === '') {
                     nextCol.innerHTML = cell.innerHTML;
-                    cell.innerHTML = '0';
+                    cell.innerHTML = '';
                 } else {
                     combineCells(nextCol, cell);
                 }
@@ -138,7 +138,7 @@ const findValidCellHorizontal = (direction, row, rowIndex, colIndex) => {
 
     if (direction == 'left') {
         while (!validCell && index < colIndex) {
-            if (nextCell.innerHTML === '0' || nextCell.innerHTML === cell.innerHTML) {
+            if (nextCell.innerHTML === '' || nextCell.innerHTML === cell.innerHTML) {
                 validCell = true;
             } else {
                 index++;
@@ -147,7 +147,7 @@ const findValidCellHorizontal = (direction, row, rowIndex, colIndex) => {
         }
     } else {
         while (!validCell && index > colIndex) {
-            if (nextCell.innerHTML === '0' || nextCell.innerHTML === cell.innerHTML) {
+            if (nextCell.innerHTML === '' || nextCell.innerHTML === cell.innerHTML) {
                 validCell = true;
             } else {
                 index--;
@@ -170,7 +170,7 @@ const findValidCellVertical = (direction, rows, rowIndex, colIndex) => {
 
     if (direction == 'up') {
         while (!validCell && index < rowIndex) {
-            if (nextRow.innerHTML === '0' || nextRow.innerHTML === cell.innerHTML) {
+            if (nextRow.innerHTML === '' || nextRow.innerHTML === cell.innerHTML) {
                 validCell = true;
             } else {
                 index++;
@@ -179,7 +179,7 @@ const findValidCellVertical = (direction, rows, rowIndex, colIndex) => {
         }
     } else {
         while (!validCell && index > rowIndex) {
-            if (nextRow.innerHTML === '0' || nextRow.innerHTML === cell.innerHTML) {
+            if (nextRow.innerHTML === '' || nextRow.innerHTML === cell.innerHTML) {
                 validCell = true;
             } else {
                 index--;
@@ -195,7 +195,7 @@ const findValidCellVertical = (direction, rows, rowIndex, colIndex) => {
 const combineCells = (nextRow, cell) => {
     if (nextRow.innerHTML === cell.innerHTML) {
         nextRow.innerHTML = parseInt(nextRow.innerHTML) + parseInt(cell.innerHTML);
-        cell.innerHTML = '0';
+        cell.innerHTML = '';
 
         score += parseInt(nextRow.innerHTML);
         $score.innerHTML = `${score}`;
@@ -211,7 +211,7 @@ const getEmptyCells = () => {
         for (let j = 0; j < row.children.length; j++) {
             const cell = row.children[j];
 
-            if (cell.innerHTML === '0') {
+            if (cell.innerHTML === '') {
                 emptyCells.push(cell);
             }
         }
@@ -250,7 +250,7 @@ const checkWin = () => {
 
 addEventListener('keydown', (event) => {
     if (gameOver || win) return;
-    
+
     switch (event.key) {
         case "ArrowDown":
             moveDown();
