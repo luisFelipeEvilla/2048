@@ -30,11 +30,38 @@ const moveDown = () => {
 
         for (let j = 0; j < row.children.length; j++) {
             const cell = row.children[j];
-            let next = i + 1;
 
             // move cell down if it is not empty
             if (cell.innerHTML !== '0') {
                 const nextRow = findValidCellVertical('down', rows, i, j);
+
+                if (nextRow) {
+                    if (nextRow.innerHTML === '0') {
+                        nextRow.innerHTML = cell.innerHTML;
+                        cell.innerHTML = '0';
+                    } else {
+                        combineCells(nextRow, cell);
+                    }
+                }
+            }
+        }
+    }
+
+    addNewToken();
+}
+
+const moveUp = () => {
+    const rows = $grid.children;
+
+    for (let i = 0; i <= rows.length - 1; i++) {
+        const row = rows[i];
+
+        for (let j = 0; j < row.children.length; j++) {
+            const cell = row.children[j];
+
+            // move cell down if it is not empty
+            if (cell.innerHTML !== '0') {
+                const nextRow = findValidCellVertical('up', rows, i, j);
 
                 if (nextRow) {
                     if (nextRow.innerHTML === '0') {
@@ -112,8 +139,15 @@ const addNewToken = () => {
 }
 
 addEventListener('keydown', (event) => {
-    if (event.key === 'ArrowDown') {
-        moveDown();
+    switch (event.key) {
+        case "ArrowDown":
+            moveDown();
+            break;
+        case "ArrowUp":
+            moveUp();
+            break;
+        default:
+            break;
     }
 });
 
