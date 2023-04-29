@@ -34,7 +34,7 @@ const moveDown = () => {
 
             // move cell down if it is not empty
             if (cell.innerHTML !== '0') {
-                const nextRow = findValidCellVertical(rows, i, j);
+                const nextRow = findValidCellVertical('down', rows, i, j);
 
                 if (nextRow) {
                     if (nextRow.innerHTML === '0') {
@@ -51,21 +51,35 @@ const moveDown = () => {
     addNewToken();
 }
 
-const findValidCellVertical = (rows, rowIndex, colIndex) => {
-    let nextRow = rows[rows.length - 1].children[colIndex];
-    let index = rows.length - 1;
+const findValidCellVertical = (direction, rows, rowIndex, colIndex) => {
+    let startPoint = direction === 'up' ? 0 : rows.length - 1;
+    let index = direction === 'up' ? 0 : rows.length - 1;
+
+    let nextRow = rows[startPoint].children[colIndex];
     let validCell = false;
 
     const cell = rows[rowIndex].children[colIndex];
 
-    while (!validCell && index > rowIndex) {
-        if (nextRow.innerHTML === '0' || nextRow.innerHTML === cell.innerHTML) {
-            validCell = true;
-        } else {
-            index--;
-            nextRow = rows[index].children[colIndex];
+    if (direction == 'up') {
+        while (!validCell && index < rowIndex) {
+            if (nextRow.innerHTML === '0' || nextRow.innerHTML === cell.innerHTML) {
+                validCell = true;
+            } else {
+                index++;
+                nextRow = rows[index].children[colIndex];
+            }
+        }
+    } else {
+        while (!validCell && index > rowIndex) {
+            if (nextRow.innerHTML === '0' || nextRow.innerHTML === cell.innerHTML) {
+                validCell = true;
+            } else {
+                index--;
+                nextRow = rows[index].children[colIndex];
+            }
         }
     }
+
 
     return validCell ? nextRow : false;
 }
@@ -103,4 +117,4 @@ addEventListener('keydown', (event) => {
     }
 });
 
-start();
+// start();
