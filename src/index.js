@@ -1,6 +1,8 @@
 const $grid = document.querySelector('#grid');
 
 let score = 0;
+let win = false;
+let gameOver = false;
 const $score = document.querySelector('#score');
 
 // array 4x4 of all cells with 0 value
@@ -15,6 +17,7 @@ const moveDown = () => {
     // move alll cells down
 
     const rows = $grid.children;
+    let thereIsAMove = false;
 
     for (let i = rows.length - 2; i >= 0; i--) {
         const row = rows[i];
@@ -33,16 +36,18 @@ const moveDown = () => {
                     } else {
                         combineCells(nextRow, cell);
                     }
+                    thereIsAMove = true;
                 }
             }
         }
     }
 
-    addNewToken();
+    if (thereIsAMove) addNewToken();
 }
 
 const moveUp = () => {
     const rows = $grid.children;
+    let thereIsAMove = false;
 
     for (let i = 0; i <= rows.length - 1; i++) {
         const row = rows[i];
@@ -61,16 +66,18 @@ const moveUp = () => {
                     } else {
                         combineCells(nextRow, cell);
                     }
+                    thereIsAMove = true;
                 }
             }
         }
     }
 
-    addNewToken();
+    if (thereIsAMove) addNewToken();
 }
 
 const moveRight = () => {
     const rows = $grid.children;
+    let thereIsAMove = false;
 
     for (let i = 0; i <= rows.length - 1; i++) {
         const row = rows[i];
@@ -86,15 +93,17 @@ const moveRight = () => {
                 } else {
                     combineCells(nextCol, cell);
                 }
+                thereIsAMove = true;
             }
         }
     }
 
-    addNewToken();
+    if (thereIsAMove) addNewToken();
 }
 
 const moveLeft = () => {
     const rows = $grid.children;
+    let thereIsAMove = false;
 
     for (let i = 0; i <= rows.length - 1; i++) {
         const row = rows[i];
@@ -110,11 +119,12 @@ const moveLeft = () => {
                 } else {
                     combineCells(nextCol, cell);
                 }
+                thereIsAMove = true;
             }
         }
     }
 
-    addNewToken();
+    if (thereIsAMove) addNewToken();
 }
 
 const findValidCellHorizontal = (direction, row, rowIndex, colIndex) => {
@@ -192,8 +202,7 @@ const combineCells = (nextRow, cell) => {
     }
 }
 
-const addNewToken = () => {
-    // save all empty cells
+const getEmptyCells = () => {
     const emptyCells = [];
 
     for (let i = 0; i < $grid.children.length; i++) {
@@ -208,6 +217,13 @@ const addNewToken = () => {
         }
     }
 
+    return emptyCells;
+}
+
+const addNewToken = () => {
+    // save all empty cells
+    const emptyCells = getEmptyCells();
+
     // add new token to random empty cell
     if (emptyCells.length > 0) {
         const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
@@ -215,7 +231,26 @@ const addNewToken = () => {
     }
 }
 
+const checkGameOver = () => {
+    // check if there are any empty cells
+    const emptyCells = getEmptyCells();
+
+    if (emptyCells.length === 0) {
+        alert('Game Over');
+        gameOver = true;
+    }
+}
+
+const checkWin = () => {
+    if (score >= 2048) {
+        alert('You Win!');
+        win = true;
+    }
+}
+
 addEventListener('keydown', (event) => {
+    if (gameOver || win) return;
+    
     switch (event.key) {
         case "ArrowDown":
             moveDown();
@@ -233,6 +268,9 @@ addEventListener('keydown', (event) => {
         default:
             break;
     }
+
+    checkGameOver();
+    checkWin();
 });
 
 start();
