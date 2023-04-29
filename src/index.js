@@ -7,18 +7,8 @@ const $score = document.querySelector('#score');
 const grid = [0, 0,];
 
 const start = () => {
-    const rows = $grid.children;
-
-    // get two randon numbers between 0 and 3
-    const randomRow1 = Math.floor(Math.random() * 4);
-    const randomRow2 = Math.floor(Math.random() * 4);
-
-    // get two random numbers between 0 and 3
-    const randomCell1 = Math.floor(Math.random() * 4);
-    const randomCell2 = Math.floor(Math.random() * 4);
-
-    rows[randomRow1].children[randomCell1].innerHTML = '2';
-    rows[randomRow2].children[randomCell2].innerHTML = '2';
+    addNewToken();
+    addNewToken();
 };
 
 const moveDown = () => {
@@ -198,25 +188,30 @@ const combineCells = (nextRow, cell) => {
         cell.innerHTML = '0';
 
         score += parseInt(nextRow.innerHTML);
-        $score.innerHTML = `Score: ${score}`;
+        $score.innerHTML = `${score}`;
     }
 }
 
 const addNewToken = () => {
-    let emptyCell = false;
-    const rows = $grid.children;
+    // save all empty cells
+    const emptyCells = [];
 
-    while (!emptyCell) {
-        // add new cell with value 2 or 4
-        const randomRow = Math.floor(Math.random() * 4);
-        const randomCell = Math.floor(Math.random() * 4);
+    for (let i = 0; i < $grid.children.length; i++) {
+        const row = $grid.children[i];
 
-        const cell = rows[randomRow].children[randomCell];
+        for (let j = 0; j < row.children.length; j++) {
+            const cell = row.children[j];
 
-        if (cell.innerHTML === '0') {
-            cell.innerHTML = '2';
-            emptyCell = true;
+            if (cell.innerHTML === '0') {
+                emptyCells.push(cell);
+            }
         }
+    }
+
+    // add new token to random empty cell
+    if (emptyCells.length > 0) {
+        const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+        randomCell.innerHTML = '2';
     }
 }
 
