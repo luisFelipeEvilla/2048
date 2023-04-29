@@ -78,6 +78,55 @@ const moveUp = () => {
     addNewToken();
 }
 
+const moveRight = () => {
+    const rows = $grid.children;
+
+    for (let i = 0; i <= rows.length - 1; i++) {
+        const row = rows[i];
+        
+        for (let j = 0; j < row.children.length; j++) {
+            const cell = row.children[j];
+            const nextCol = findValidCellHorizontal('right', row, i, j); 
+            
+            if (nextCol) {
+                if (nextCol.innerHTML === '0') {
+                    nextCol.innerHTML = cell.innerHTML;
+                    cell.innerHTML = '0';
+                } else {
+                    combineCells(nextCol, cell);
+                }
+            }
+        }
+    }
+
+ //   addNewToken();
+}
+
+const findValidCellHorizontal = (direction, row, rowIndex, colIndex) => {
+    let startPoint = direction === 'left' ? 0 : row.children.length - 1;
+    let index = direction === 'left' ? 0 : row.children.length - 1;
+
+    let nextCell = row.children[startPoint];
+    let validCell = false;
+
+    const cell = row.children[colIndex];
+
+    if (direction == 'left') {
+        
+    } else {
+        while (!validCell && index > colIndex) {
+            if (nextCell.innerHTML === '0' || nextCell.innerHTML === cell.innerHTML) {
+                validCell = true;
+            } else {
+                index--;
+                nextCell = row.children[index];
+            }
+        }
+    }
+
+    return validCell ? nextCell : false;
+}
+
 const findValidCellVertical = (direction, rows, rowIndex, colIndex) => {
     let startPoint = direction === 'up' ? 0 : rows.length - 1;
     let index = direction === 'up' ? 0 : rows.length - 1;
@@ -145,7 +194,9 @@ addEventListener('keydown', (event) => {
             break;
         case "ArrowUp":
             moveUp();
-            break;
+            break; 
+        case "ArrowRight":
+            moveRight();
         default:
             break;
     }
