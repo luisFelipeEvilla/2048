@@ -1,6 +1,7 @@
 const $grid = document.querySelector('#grid');
 
 let score = 0;
+const $score = document.querySelector('#score');
 
 // array 4x4 of all cells with 0 value
 const grid = [0, 0,];
@@ -99,7 +100,31 @@ const moveRight = () => {
         }
     }
 
- //   addNewToken();
+    addNewToken();
+}
+
+const moveLeft = () => {
+    const rows = $grid.children;
+
+    for (let i = 0; i <= rows.length - 1; i++) {
+        const row = rows[i];
+        
+        for (let j = row.children.length - 1; j >= 0; j--) {
+            const cell = row.children[j];
+            const nextCol = findValidCellHorizontal('left', row, i, j); 
+            
+            if (nextCol) {
+                if (nextCol.innerHTML === '0') {
+                    nextCol.innerHTML = cell.innerHTML;
+                    cell.innerHTML = '0';
+                } else {
+                    combineCells(nextCol, cell);
+                }
+            }
+        }
+    }
+
+    addNewToken();
 }
 
 const findValidCellHorizontal = (direction, row, rowIndex, colIndex) => {
@@ -112,7 +137,14 @@ const findValidCellHorizontal = (direction, row, rowIndex, colIndex) => {
     const cell = row.children[colIndex];
 
     if (direction == 'left') {
-        
+        while (!validCell && index < colIndex) {
+            if (nextCell.innerHTML === '0' || nextCell.innerHTML === cell.innerHTML) {
+                validCell = true;
+            } else {
+                index++;
+                nextCell = row.children[index];
+            }
+        }
     } else {
         while (!validCell && index > colIndex) {
             if (nextCell.innerHTML === '0' || nextCell.innerHTML === cell.innerHTML) {
@@ -166,6 +198,7 @@ const combineCells = (nextRow, cell) => {
         cell.innerHTML = '0';
 
         score += parseInt(nextRow.innerHTML);
+        $score.innerHTML = `Score: ${score}`;
     }
 }
 
@@ -196,10 +229,15 @@ addEventListener('keydown', (event) => {
             moveUp();
             break; 
         case "ArrowRight":
+            console.log('right');
             moveRight();
+            break;
+        case "ArrowLeft":
+            moveLeft();
+            break;
         default:
             break;
     }
 });
 
-// start();
+start();
